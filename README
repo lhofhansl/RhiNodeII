@@ -1,4 +1,4 @@
-This is version w of RhiNode, a Javascript API around Java's NIO library.
+This is version 2 of RhiNode, a Javascript API around Java's NIO library.
 
 The API is heavily inspired by node.js. Where feasible and
 sensible the API is compatible to node.js.
