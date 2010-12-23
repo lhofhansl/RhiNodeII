@@ -80,6 +80,8 @@ public class JsReadWriteHandler extends EventListener implements ReadStream, Sel
         if (args.length == 1) {
             if(args[0] instanceof ByteBuffer) {
                 thisHandle.buffer((ByteBuffer)args[0]);
+            } else if (args[0] instanceof NativeJavaArray) {
+                thisHandle.buffer((byte[])((NativeJavaArray)args[0]).unwrap());
             } else if (args[0] instanceof byte[]) {
                 thisHandle.buffer((byte[])args[0]);
             } else {
