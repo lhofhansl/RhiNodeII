@@ -19,7 +19,9 @@ public class JsReadWriteHandler extends EventListener implements ReadStream, Sel
 {
     private static final long serialVersionUID = 1L;
 
+    // one read pool shared by all streams
     private final static BytePool readPool = new BytePool();
+    // each stream gets its own output buffer
     private final ByteBufferOutputStream writeBuffer = new ByteBufferOutputStream(256*1024);
     private SelectionKey key;
     private boolean closeRequested = false;
@@ -82,8 +84,8 @@ public class JsReadWriteHandler extends EventListener implements ReadStream, Sel
                 thisHandle.buffer((ByteBuffer)args[0]);
             } else if (args[0] instanceof NativeJavaArray) {
                 thisHandle.buffer((byte[])((NativeJavaArray)args[0]).unwrap());
-            } else if (args[0] instanceof byte[]) {
-                thisHandle.buffer((byte[])args[0]);
+            //} else if (args[0] instanceof byte[]) {
+                //thisHandle.buffer((byte[])args[0]);
             } else {
                 thisHandle.buffer((String)args[0]);
             }

@@ -43,6 +43,7 @@ public class ByteBufferOutputStream extends OutputStream {
     }
 
     public void clear() {
+        // this is "optimized" for many low volume connections
         buffer = null;
     }
     public void reset() {
@@ -68,6 +69,9 @@ public class ByteBufferOutputStream extends OutputStream {
         }
         if (buffer.remaining() == 0) {
             reset();
+        } else {
+            // make sure the internal buffer is reset correctly
+            buffer.compact();
         }
         return size();
     }
