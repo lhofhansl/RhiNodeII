@@ -17,8 +17,13 @@ public class ByteBufferOutputStream extends OutputStream {
     
     @Override
     public void write(byte[] b, int off, int len) {
-        ensureLen(len);
-        buffer.put(b, off, len);
+        if (buffer == null) {
+            buffer = ByteBuffer.wrap(b,off,len);
+            buffer.position(buffer.limit());
+        } else {
+            ensureLen(len);
+            buffer.put(b,off,len);
+        }
     }
     
     public void write(ByteBuffer b) {
@@ -38,8 +43,7 @@ public class ByteBufferOutputStream extends OutputStream {
     public void write(String data, String enc) {
         byte[] a = null;
         try { a = data.getBytes(enc); } catch(UnsupportedEncodingException x) { throw new RuntimeException(x); }
-        ensureLen(a.length);
-        buffer.put(a);
+        write(a,0,a.length);
     }
 
     public void clear() {

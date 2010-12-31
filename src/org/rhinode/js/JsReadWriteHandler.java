@@ -22,6 +22,7 @@ public class JsReadWriteHandler extends EventListener implements ReadStream, Sel
     // one read pool shared by all streams
     private final static BytePool readPool = new BytePool();
     // each stream gets its own output buffer
+    //private final ByteBufferOutputStreamGather writeBuffer = new ByteBufferOutputStreamGather();
     private final ByteBufferOutputStream writeBuffer = new ByteBufferOutputStream(256*1024);
     private SelectionKey key;
     private boolean closeRequested = false;
@@ -63,7 +64,7 @@ public class JsReadWriteHandler extends EventListener implements ReadStream, Sel
                     onData(this.decoder != null ? this.decoder.decode(data) : data);
                 }
             } else if (key.isWritable()) {
-                if (this.writeBuffer.writeTo((WritableByteChannel)key.channel()) == 0) {
+                if (this.writeBuffer.writeTo((SocketChannel)key.channel()) == 0) {
                     key.interestOps(SelectionKey.OP_READ);
                     onDrain();
                     if(closeRequested) {
@@ -109,7 +110,7 @@ public class JsReadWriteHandler extends EventListener implements ReadStream, Sel
         if ((this.key.interestOps() & SelectionKey.OP_WRITE) != 0) return false;
 
         if (this.writeBuffer.size() > 0) {
-            if (this.writeBuffer.writeTo((WritableByteChannel)this.key.channel()) > 0) {
+            if (this.writeBuffer.writeTo((SocketChannel)this.key.channel()) > 0) {
                 this.key.interestOps(SelectionKey.OP_WRITE);
                 return false;
             }
