@@ -15,7 +15,7 @@ import java.util.*;
  * Keeping this around for now.
  */
 public class ByteBufferOutputStreamGather extends OutputStream {
-    private List<ByteBuffer> buffers = new LinkedList<ByteBuffer>();
+    private List<ByteBuffer> buffers = new ArrayList<ByteBuffer>();
 
     public ByteBufferOutputStreamGather() {
     }
@@ -30,7 +30,7 @@ public class ByteBufferOutputStreamGather extends OutputStream {
     }
     
     public void write(ByteBuffer b) {
-        buffers.add((ByteBuffer)b.flip());
+        buffers.add(b);
     }
     
     public void write(int b) {

@@ -86,6 +86,19 @@ public class JsHttpWriter extends EventListener {
         return stream.flush();
     }
 
+    @JSFunction
+    public static void end(Context cx, Scriptable thisObj, Object[] args, Function funObj) throws IOException {
+        JsHttpWriter obj = (JsHttpWriter)thisObj;
+        
+        write(cx,thisObj,args,funObj);
+        if (obj.chunked) {
+        } else {
+            if (obj.keepAlive != null && !obj.keepAlive.booleanValue()) {
+                obj.stream.end();
+            }
+        }
+    }
+
     public void writeHead(int statusCode, Map<String, String> hdrs) {
         stream.buffer("HTTP/"+this.httpVersion+" "+statusCode+" "+HEADERS.get(statusCode)+"\r\n");
         for(Map.Entry<String,String> h : hdrs.entrySet()) {

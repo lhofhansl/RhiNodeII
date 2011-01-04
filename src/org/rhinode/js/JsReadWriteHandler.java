@@ -81,12 +81,10 @@ public class JsReadWriteHandler extends EventListener implements ReadStream, Sel
     public static void buffer(Context cx, Scriptable thisObj, Object[] args, Function funObj) throws IOException {
         JsReadWriteHandler thisHandle = (JsReadWriteHandler)thisObj;
         if (args.length == 1) {
-            if(args[0] instanceof ByteBuffer) {
-                thisHandle.buffer((ByteBuffer)args[0]);
+            if(args[0] instanceof NativeJavaObject) {
+                thisHandle.buffer((ByteBuffer)((NativeJavaObject)args[0]).unwrap());
             } else if (args[0] instanceof NativeJavaArray) {
                 thisHandle.buffer((byte[])((NativeJavaArray)args[0]).unwrap());
-            //} else if (args[0] instanceof byte[]) {
-                //thisHandle.buffer((byte[])args[0]);
             } else {
                 thisHandle.buffer((String)args[0]);
             }
